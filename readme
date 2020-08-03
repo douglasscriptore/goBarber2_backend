@@ -1,0 +1,16 @@
+   /* transpileOnly: executa o código sem ver se está certo o uerrado*/
+   /* inspect: possibilita que o vscode se conecte no nosso projeto que está rodando para debugar*/
+
+
+
+
+
+/*
+* SoC => Separation of Concerns
+* DTO => Data Transfer Object
+* Model => Representação dos dados
+* Repository => Trabalha com o dado (CRUD), fica entre a persistencia e a rota
+* Service => Armazena a regra de negócio da Aplicação => o service não transforma dados
+* SOLID => Dependecy Inversion => Utilizado quando o service tem uma dependencia externa, ao invés de instanciar um novo objeto de repository a gente passa no constructor
+* DRY => Don't repeat Yourself => Não repita regra de negócio dentro da sua aplicação
+*/
