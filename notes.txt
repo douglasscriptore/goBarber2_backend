@@ -1,0 +1,1 @@
+-r tsconfig-paths/register é proveniente da lib tsconfig-paths instalado em dev, para dizer pro ts-node entender o @ dos imports
