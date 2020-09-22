@@ -8,6 +8,18 @@ import AppError from '@shared/errors/AppError';
 
 // describe cria categoria de test
 describe('UpdateUserAvatarService', () => {
+  let fakeUsersRepository: FakeUsersRepository;
+  let fakeStorageProvider: FakeStorageProvider;
+  let updateUserAvatar: UpdateUserAvatarService;
+  beforeEach(() => {
+    fakeUsersRepository = new FakeUsersRepository();
+    fakeStorageProvider = new FakeStorageProvider();
+    updateUserAvatar = new UpdateUserAvatarService(
+      fakeUsersRepository,
+      fakeStorageProvider,
+    );
+  });
+
   // user it no logar de test(), deve se ler it junto com o texto
   it('should be able to update avatar', async () => {
     const fakeUsersRepository = new FakeUsersRepository();
@@ -32,13 +44,6 @@ describe('UpdateUserAvatarService', () => {
   });
 
   it('should not be able to update a vatar from non existing user', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeStorageProvider = new FakeStorageProvider();
-    const updateUserAvatar = new UpdateUserAvatarService(
-      fakeUsersRepository,
-      fakeStorageProvider,
-    );
-
     await expect(
       updateUserAvatar.execute({
         user_id: 'non-existing-user',
@@ -48,16 +53,8 @@ describe('UpdateUserAvatarService', () => {
   });
 
   it('should delete old avatar when updating new one', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeStorageProvider = new FakeStorageProvider();
-
     // a função spyOn do jest indentifica se a função desejada foi disparada
     const deleteFile = jest.spyOn(fakeStorageProvider, 'deleteFile');
-
-    const updateUserAvatar = new UpdateUserAvatarService(
-      fakeUsersRepository,
-      fakeStorageProvider,
-    );
 
     const user = await fakeUsersRepository.create({
       name: 'John Doe',

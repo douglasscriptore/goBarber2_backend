@@ -8,15 +8,20 @@ import AppError from '@shared/errors/AppError';
 
 // describe cria categoria de test
 describe('CreateUserService', () => {
-  // user it no logar de test(), deve se ler it junto com o texto
-  it('should be able to create a new user', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
-    const createUserService = new CreateUserService(
+  let fakeUsersRepository: FakeUsersRepository;
+  let fakeHashProvider: FakeHashProvider;
+  let createUserService: CreateUserService;
+  beforeEach(() => {
+    fakeUsersRepository = new FakeUsersRepository();
+    fakeHashProvider = new FakeHashProvider();
+    createUserService = new CreateUserService(
       fakeUsersRepository,
       fakeHashProvider,
     );
+  });
 
+  // user it no logar de test(), deve se ler it junto com o texto
+  it('should be able to create a new user', async () => {
     const user = await createUserService.execute({
       name: 'John Doe',
       email: 'john@email.com.br',
@@ -27,13 +32,6 @@ describe('CreateUserService', () => {
   });
 
   it('should not be able to create a new user with same email from another', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
-    const createUserService = new CreateUserService(
-      fakeUsersRepository,
-      fakeHashProvider,
-    );
-
     await createUserService.execute({
       name: 'John Doe',
       email: 'john@email.com.br',
