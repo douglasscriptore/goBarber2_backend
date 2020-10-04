@@ -12,6 +12,9 @@ import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepo
 import IUsersTokensRepository from '@modules/users/repositories/IUsersTokensRepository';
 import UsersTokenRepository from '@modules/users/infra/typeorm/repositories/UsersTokenRepository';
 
+import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
+import NotificationsRepository from '@modules/notifications/infra/typeorm/repositories/NotificationsRepository';
+
 // configuração de injeção de dependência
 // toda ves que o register() for chamado ele cria uma nova instnacia do AppointmentsRepository
 // o registerSingleton é instanciado apenas 1 vez
@@ -29,4 +32,9 @@ container.registerSingleton<IUsersRepository>(
 container.registerSingleton<IUsersTokensRepository>(
   'UsersTokenRepository',
   UsersTokenRepository,
+);
+
+container.registerSingleton<INotificationsRepository>(
+  'NotificationsRepository',
+  NotificationsRepository,
 );

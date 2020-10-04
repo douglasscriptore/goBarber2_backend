@@ -1,5 +1,6 @@
 // fake repository tem que vir primeiro
 import FakeAppointmentsRepository from '../repositories/fakes/FakeAppointmentsRepository';
+import FakeNotificationsRepository from '@modules/notifications/repositories/fakes/FakeNotificationsRepository';
 import CreateAppointmentService from './CreateAppointmentService';
 import AppError from '@shared/errors/AppError';
 
@@ -8,11 +9,15 @@ import AppError from '@shared/errors/AppError';
 // describe cria categoria de test
 describe('CreateAppointmentService', () => {
   let fakeAppointmentsRepository: FakeAppointmentsRepository;
+  let fakeNotificationsRepository: FakeNotificationsRepository;
   let createAppointment: CreateAppointmentService;
+
   beforeEach(() => {
     fakeAppointmentsRepository = new FakeAppointmentsRepository();
+    fakeNotificationsRepository = new FakeNotificationsRepository();
     createAppointment = new CreateAppointmentService(
       fakeAppointmentsRepository,
+      fakeNotificationsRepository,
     );
   });
 
