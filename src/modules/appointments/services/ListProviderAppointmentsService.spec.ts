@@ -1,7 +1,7 @@
 // fake repository tem que vir primeiro
 import FakeAppointmentsRepository from '@modules/appointments/repositories/fakes/FakeAppointmentsRepository';
 import ListProviderAppointmentsService from './ListProviderAppointmentsService';
-import AppError from '@shared/errors/AppError';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 
 // Teste unitário não deve depender de nada alem dele msm
 
@@ -9,11 +9,14 @@ import AppError from '@shared/errors/AppError';
 describe('ListProviderAppointmentsService', () => {
   let fakeAppointmentsRepository: FakeAppointmentsRepository;
   let listProviderAppointments: ListProviderAppointmentsService;
+  let fakeCacheProvider: FakeCacheProvider;
 
   beforeEach(() => {
     fakeAppointmentsRepository = new FakeAppointmentsRepository();
+    fakeCacheProvider = new FakeCacheProvider();
     listProviderAppointments = new ListProviderAppointmentsService(
       fakeAppointmentsRepository,
+      fakeCacheProvider,
     );
   });
 

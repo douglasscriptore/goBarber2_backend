@@ -1,5 +1,6 @@
 // fake repository tem que vir primeiro
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import ListProvidersService from './ListProvidersService';
 
 // Teste unitário não deve depender de nada alem dele msm
@@ -7,11 +8,16 @@ import ListProvidersService from './ListProvidersService';
 // describe cria categoria de test
 describe('ListProvidersService', () => {
   let fakeUsersRepository: FakeUsersRepository;
+  let fakeCacheProvider: FakeCacheProvider;
   let listProviders: ListProvidersService;
 
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository();
-    listProviders = new ListProvidersService(fakeUsersRepository);
+    fakeCacheProvider = new FakeCacheProvider();
+    listProviders = new ListProvidersService(
+      fakeUsersRepository,
+      fakeCacheProvider,
+    );
   });
 
   it('should be able to list the providers', async () => {

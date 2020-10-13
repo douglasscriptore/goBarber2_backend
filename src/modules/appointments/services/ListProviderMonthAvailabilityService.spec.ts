@@ -1,7 +1,6 @@
 // fake repository tem que vir primeiro
 import FakeAppointmentsRepository from '@modules/appointments/repositories/fakes/FakeAppointmentsRepository';
 import ListProviderMonthAvailabilityService from './ListProviderMonthAvailabilityService';
-import AppError from '@shared/errors/AppError';
 
 // Teste unitário não deve depender de nada alem dele msm
 

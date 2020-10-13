@@ -3,7 +3,6 @@ import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 
 import AuthenticateUserService from './AuthenticateUserService';
-import CreateUserService from './CreateUserService';
 import AppError from '@shared/errors/AppError';
 
 // Teste unitário não deve depender de nada alem dele msm
@@ -13,7 +12,6 @@ describe('AuthenticateUserService', () => {
   let fakeUsersRepository: FakeUsersRepository;
   let fakeHashProvider: FakeHashProvider;
   let authenticateUser: AuthenticateUserService;
-  let createUserService: CreateUserService;
 
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository();
@@ -22,14 +20,10 @@ describe('AuthenticateUserService', () => {
       fakeUsersRepository,
       fakeHashProvider,
     );
-    createUserService = new CreateUserService(
-      fakeUsersRepository,
-      fakeHashProvider,
-    );
   });
   // user it no logar de test(), deve se ler it junto com o texto
   it('should be able to authenticate', async () => {
-    const user = await createUserService.execute({
+    const user = await fakeUsersRepository.create({
       name: 'John doh',
       email: 'john@email.com.br',
       password: 'qwe123',
@@ -54,7 +48,7 @@ describe('AuthenticateUserService', () => {
   });
 
   it('should not be able to authenticate with wrong password', async () => {
-    await createUserService.execute({
+    await fakeUsersRepository.create({
       name: 'John doh',
       email: 'john@email.com.br',
       password: 'qwe123',
