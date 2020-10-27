@@ -15,16 +15,16 @@ providersRouter.use(ensureAuthenticated);
 
 providersRouter.get('/', providersController.index);
 providersRouter.get(
-  '/:id/month-availability',
+  '/:provider_id/month-availability',
   celebrate({
-    [Segments.PARAMS]: { provider_id: Joi.string().uuid().required },
+    [Segments.PARAMS]: { provider_id: Joi.string().uuid().required() },
   }),
   providerMonthAvailabilityController.index,
 );
 providersRouter.get(
-  '/:id/day-availability',
+  '/:provider_id/day-availability',
   celebrate({
-    [Segments.PARAMS]: { provider_id: Joi.string().uuid().required },
+    [Segments.PARAMS]: { provider_id: Joi.string().uuid().required() },
   }),
   providerDayAvailabilityController.index,
 );
