@@ -1,16 +1,15 @@
 import { injectable, inject } from 'tsyringe';
 import { getHours, isAfter } from 'date-fns';
 
-import IAppointimentsRepository from '../repositories/IAppointimentsRepository';
+import IAppointmentsRepository from '../repositories/IAppointimentsRepository';
 
-interface IRequestDTO {
+interface IRequest {
   provider_id: string;
   day: number;
   month: number;
   year: number;
 }
 
-// no retorno da função, o certo é vc já retornar a estrutura correta e não usar IResponse[] por exemplo.
 type IResponse = Array<{
   hour: number;
   available: boolean;
@@ -19,26 +18,27 @@ type IResponse = Array<{
 @injectable()
 class ListProviderDayAvailabilityService {
   constructor(
-    @inject('AppointimentsRepository')
-    private appointimentsRepository: IAppointimentsRepository,
-  ) { }
+    @inject('AppointmentsRepository')
+    private appointmentsRepository: IAppointmentsRepository,
+  ) {}
 
   public async execute({
     provider_id,
-    month,
     year,
+    month,
     day,
-  }: IRequestDTO): Promise<IResponse> {
-    const appointments = await this.appointimentsRepository.findAllInDayFromProvider(
+  }: IRequest): Promise<IResponse> {
+    const appointments = await this.appointmentsRepository.findAllInDayFromProvider(
       {
         provider_id,
-        month,
         year,
+        month,
         day,
       },
     );
 
     const hourStart = 8;
+
     const eachHourArray = Array.from(
       { length: 10 },
       (_, index) => index + hourStart,
@@ -58,6 +58,7 @@ class ListProviderDayAvailabilityService {
         available: !hasAppointmentInHour && isAfter(compareDate, currentDate),
       };
     });
+
     return availability;
   }
 }

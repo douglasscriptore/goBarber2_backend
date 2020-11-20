@@ -19,7 +19,7 @@ class ResetPasswordService {
     private usersTokensRepository: IUsersTokensRepository,
     @inject('HashProvider')
     private hashProvider: IHashProvider,
-  ) { }
+  ) {}
 
   public async execute({ token, password }: IRequest): Promise<void> {
     const userToken = await this.usersTokensRepository.findByToken(token);

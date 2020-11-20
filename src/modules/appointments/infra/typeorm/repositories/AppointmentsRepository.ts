@@ -1,12 +1,13 @@
-import Appointment from '../entities/Appointment';
 import { getRepository, Repository, Raw } from 'typeorm';
 
-import ICreateAppointmentDto from '@modules/appointments/dtos/ICreateAppointmentDTO';
-import IFindAllInDayFromProviderDTO from '@modules/appointments/dtos/IFindAllInDayFromProviderDTO';
+import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
+import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
 import IFindAllInMonthFromProviderDTO from '@modules/appointments/dtos/IFindAllInMonthFromProviderDTO';
-import IAppointimentsRepository from '@modules/appointments/repositories/IAppointimentsRepository';
+import IFindAllInDayFromProviderDTO from '@modules/appointments/dtos/IFindAllInDayFromProviderDTO';
 
-class AppointmentsRepository implements IAppointimentsRepository {
+import Appointment from '../entities/Appointment';
+
+class AppointmentsRepository implements IAppointmentsRepository {
   private ormRepository: Repository<Appointment>;
 
   constructor() {
@@ -24,38 +25,14 @@ class AppointmentsRepository implements IAppointimentsRepository {
     return findAppointment;
   }
 
-  public async findAllInDayFromProvider({
-    provider_id,
-    day,
-    year,
-    month,
-  }: IFindAllInDayFromProviderDTO): Promise<Appointment[]> {
-    // o ped start verifica se minha string não tem 2 numeros, e add 0 a esquerda, por isso padStart() e não padEnd()
-    const parsedMonth = String(month).padStart(2, '0');
-    const parsedDay = String(day).padStart(2, '0');
-
-    const appointments = this.ormRepository.find({
-      where: {
-        provider_id,
-        date: Raw(
-          dateFieldName =>
-            `to_char(${dateFieldName}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`,
-        ),
-      },
-      relations: ['user'],
-    });
-    return appointments;
-  }
-
   public async findAllInMonthFromProvider({
     provider_id,
-    year,
     month,
+    year,
   }: IFindAllInMonthFromProviderDTO): Promise<Appointment[]> {
-    // o ped start verifica se minha string não tem 2 numeros, e add 0 a esquerda, por isso padStart() e não padEnd()
     const parsedMonth = String(month).padStart(2, '0');
 
-    const appointments = this.ormRepository.find({
+    const appointments = await this.ormRepository.find({
       where: {
         provider_id,
         date: Raw(
@@ -68,12 +45,35 @@ class AppointmentsRepository implements IAppointimentsRepository {
     return appointments;
   }
 
+  public async findAllInDayFromProvider({
+    provider_id,
+    day,
+    month,
+    year,
+  }: IFindAllInDayFromProviderDTO): Promise<Appointment[]> {
+    const parsedDay = String(day).padStart(2, '0');
+    const parsedMonth = String(month).padStart(2, '0');
+
+    const appointments = await this.ormRepository.find({
+      where: {
+        provider_id,
+        date: Raw(
+          dateFieldName =>
+            `to_char(${dateFieldName}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`,
+        ),
+      },
+      relations: ['user'],
+    });
+
+    return appointments;
+  }
+
   public async create({
     provider_id,
     user_id,
     date,
-  }: ICreateAppointmentDto): Promise<Appointment> {
-    const appointment = await this.ormRepository.create({
+  }: ICreateAppointmentDTO): Promise<Appointment> {
+    const appointment = this.ormRepository.create({
       provider_id,
       user_id,
       date,
